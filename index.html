@@ -1,0 +1,81 @@
+<html>
+
+    <head>
+
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>﻿
+            <script type="text/javascript" src="/socket.io/socket.io.js"></script>
+            <script>
+                    var socket=io();
+
+                    addUser();
+
+                        function addUser(){
+                            socket.emit("addUser",{userid:window.location.href.split(':')[2].split('/')[1]});
+                          //  document.getElementById("userid").value="";
+                            return false;
+    
+                        }
+
+                        function liveFriends(){
+                            friends=["mitul","parth","mayur","dhaval"];
+                            socket.emit("liveUsers",friends);
+
+                        }
+
+                        socket.on("liveUserList",(liveFriends)=>{
+
+                            var div=document.getElementById("livefriends");
+                                div.innerHTML="";
+                            for(let i=0;i<liveFriends.length;i++){
+                                div.innerHTML+=liveFriends[i].userid+" "+liveFriends[i].isLive+"<br>";
+                            }
+
+                        });
+
+                        socket.on("disconnect",()=>{
+
+                            addUser();
+                        });
+    
+                        
+                    
+                    
+                    </script>
+       
+            
+
+    </head>
+
+
+<body>
+        
+
+<form action="/userdata/uploadImages" method="post" enctype="multipart/form-data" >
+<input type="file" name="image"/>
+<input type="text" name="userid"/>
+<input type="submit" />
+</form>
+
+
+<br>
+This form is use for chat 
+
+<form>
+    <input type="text" name="msg" id="userid" placeholder="Enter userid"/>
+    <input type="button" onclick="addUser();" value="Add User"/>
+
+</form>
+
+<br>
+Friend List:-
+<div  id="livefriends">
+
+
+
+</div>
+<input type="button" onclick="liveFriends();" value="Check Live Friends"/>
+
+</body>
+
+
+</html>
